@@ -1,0 +1,1868 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Words Puzzle — Конкуренты (пазлы и слова)</title>
+  <link rel="icon" href="favicon.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --gd-pink: #ff6b9d;
+      --gd-magenta: #e91e8c;
+      --gd-purple: #9b59ff;
+      --gd-blue: #2ec4ff;
+      --gd-mint: #5ce1c5;
+      --gd-gold: #ffc94a;
+      --gd-dark: #1a1530;
+      --gd-text: #2d2648;
+      --gd-muted: #6b6280;
+      --gd-card: #ffffff;
+      --gd-edge: rgba(255, 255, 255, 0.65);
+      --shadow: 0 18px 50px rgba(26, 21, 48, 0.12);
+      --radius: 22px;
+      --radius-sm: 14px;
+      --tier-a: #e8f7f0;
+      --tier-a-text: #127a54;
+      --tier-b: #e8f1ff;
+      --tier-b-text: #1769e0;
+      --tier-c: #fff5d8;
+      --tier-c-text: #936000;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "DM Sans", system-ui, sans-serif;
+      color: var(--gd-text);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(255, 107, 157, 0.35), transparent 55%),
+        radial-gradient(900px 500px at 90% 0%, rgba(46, 196, 255, 0.3), transparent 50%),
+        linear-gradient(180deg, #f4f0ff 0%, #fef7fb 40%, #eef9ff 100%);
+      min-height: 100vh;
+      line-height: 1.55;
+    }
+
+    .wrap {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 32px 20px 80px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #fff6fb 0%, #f0f7ff 50%, #effffa 100%);
+      border: 1px solid var(--gd-edge);
+      border-radius: calc(var(--radius) + 8px);
+      box-shadow: var(--shadow);
+      padding: 28px 28px 22px;
+      margin-bottom: 28px;
+    }
+
+    .hero h1 {
+      font-family: "Nunito", sans-serif;
+      font-weight: 800;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      color: var(--gd-dark);
+      margin-bottom: 8px;
+    }
+
+    .hero .sub {
+      color: var(--gd-muted);
+      font-size: 0.95rem;
+      max-width: 52rem;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .pill {
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid var(--gd-edge);
+      color: var(--gd-muted);
+    }
+
+    section {
+      background: var(--gd-card);
+      border: 1px solid var(--gd-edge);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    section h2 {
+      font-family: "Nunito", sans-serif;
+      font-weight: 800;
+      font-size: 1.25rem;
+      color: var(--gd-dark);
+      margin-bottom: 6px;
+    }
+
+    section .lead {
+      color: var(--gd-muted);
+      font-size: 0.9rem;
+      margin-bottom: 18px;
+    }
+
+    h3 {
+      font-family: "Nunito", sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      margin: 20px 0 10px;
+      color: var(--gd-dark);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin: 12px 0;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(45, 38, 72, 0.08);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(45, 38, 72, 0.08);
+      vertical-align: top;
+    }
+
+    th {
+      background: linear-gradient(180deg, #f8f5ff, #f0f7ff);
+      font-weight: 700;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--gd-muted);
+      white-space: nowrap;
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    tr:hover td { background: rgba(155, 89, 255, 0.04); }
+
+    tr.ref td {
+      background: linear-gradient(90deg, rgba(255, 201, 74, 0.15), rgba(255, 107, 157, 0.08));
+      font-weight: 600;
+    }
+
+    .num { text-align: center; font-variant-numeric: tabular-nums; }
+    .score { font-weight: 700; color: var(--gd-purple); }
+
+    .tier {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .tier-a { background: var(--tier-a); color: var(--tier-a-text); }
+    .tier-b { background: var(--tier-b); color: var(--tier-b-text); }
+    .tier-c { background: var(--tier-c); color: var(--tier-c-text); }
+
+    a.store {
+      color: var(--gd-magenta);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    a.store:hover { text-decoration: underline; }
+
+    .legend {
+      display: grid;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: var(--gd-muted);
+      margin-top: 14px;
+      padding: 14px;
+      background: #f8f5ff;
+      border-radius: var(--radius-sm);
+    }
+
+    .legend strong { color: var(--gd-text); }
+
+    ol.rank {
+      padding-left: 1.25rem;
+      margin: 0;
+    }
+
+    ol.rank li {
+      margin-bottom: 6px;
+      padding-left: 4px;
+    }
+
+    .note {
+      font-size: 0.82rem;
+      color: var(--gd-muted);
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px dashed rgba(45, 38, 72, 0.12);
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--gd-muted);
+      margin-top: 8px;
+    }
+
+    .table-wrap.am-table table {
+      font-size: 0.8rem;
+    }
+
+    .table-wrap.am-table th {
+      white-space: normal;
+      line-height: 1.3;
+      max-width: 7rem;
+    }
+
+    .table-wrap.am-table th.am-sortable {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .table-wrap.am-table th.am-sortable:hover {
+      color: var(--gd-purple);
+    }
+
+    .table-wrap.am-table th .am-sort-icon {
+      display: inline-block;
+      margin-left: 3px;
+      font-size: 0.72em;
+      opacity: 0.35;
+      vertical-align: middle;
+    }
+
+    .table-wrap.am-table th.am-sort-asc .am-sort-icon,
+    .table-wrap.am-table th.am-sort-desc .am-sort-icon {
+      opacity: 1;
+      color: var(--gd-purple);
+    }
+
+    tr.am-filled td {
+      background: rgba(46, 196, 255, 0.06);
+    }
+
+    tr.am-tier-mega td {
+      background: rgba(255, 201, 74, 0.12);
+    }
+
+    .am-val {
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .am-na {
+      color: var(--gd-muted);
+      font-style: italic;
+    }
+
+    .warn-box {
+      padding: 14px 16px;
+      border-radius: var(--radius-sm);
+      background: #fff8e6;
+      border: 1px solid rgba(147, 96, 0, 0.2);
+      color: #5c4a12;
+      font-size: 0.88rem;
+      margin-bottom: 16px;
+    }
+
+    .warn-box a {
+      color: var(--gd-magenta);
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <h1>Words Puzzle — конкуренты</h1>
+      <p class="sub">
+        Жанр «пазлы и слова»: соединение букв, кроссворды, поиск слов, одиночный и мультиплеерный режимы.
+        Таблица схожести — шкала 1–5 по пяти критериям: механика, мета, экономика, live-ops, социальные функции.
+      </p>
+      <div class="meta">
+        <span class="pill">Эталон: Wordscapes — 100M+ downloads</span>
+        <span class="pill">Обновлено: июнь 2026</span>
+        <span class="pill">Внутренний документ</span>
+      </div>
+    </header>
+
+    <section id="similarity">
+      <h2>Таблица схожести (максимально похожие)</h2>
+      <p class="lead">
+        30 тайтлов, эталон — Wordscapes (№1). Сортировка по сумме баллов (Σ/25): выше в списке — выше схожесть с эталоном.
+      </p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Игра</th>
+              <th class="num">Механика</th>
+              <th class="num">Мета</th>
+              <th class="num">Экономика</th>
+              <th class="num">Live-ops</th>
+              <th class="num">Социальные</th>
+              <th class="num">Σ/25</th>
+              <th>Бенчмарк</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="ref">
+              <td>1</td>
+              <td><strong>Wordscapes</strong> (эталон)</td>
+              <td class="num">5</td>
+              <td class="num">5</td>
+              <td class="num">5</td>
+              <td class="num">5</td>
+              <td class="num">5</td>
+              <td class="num score">25</td>
+              <td>—</td>
+            </tr>
+
+            <tr>
+              <td>2</td>
+              <td>Word Stacks</td>
+              <td class="num">4</td>
+              <td class="num">5</td>
+              <td class="num">5</td>
+              <td class="num">4</td>
+              <td class="num">3</td>
+              <td class="num score">21</td>
+              <td><span class="tier tier-a">A</span></td>
+            </tr>
+
+            <tr>
+              <td>3</td>
+              <td>Wordscapes In Bloom</td>
+              <td class="num">5</td>
+              <td class="num">5</td>
+              <td class="num">5</td>
+              <td class="num">4</td>
+              <td class="num">2</td>
+              <td class="num score">21</td>
+              <td><span class="tier tier-a">A</span></td>
+            </tr>
+
+            <tr>
+              <td>4</td>
+              <td>Wordscapes Search</td>
+              <td class="num">5</td>
+              <td class="num">5</td>
+              <td class="num">5</td>
+              <td class="num">4</td>
+              <td class="num">2</td>
+              <td class="num score">21</td>
+              <td><span class="tier tier-a">A</span></td>
+            </tr>
+
+            <tr>
+              <td>5</td>
+              <td>Word Connect</td>
+              <td class="num">5</td>
+              <td class="num">5</td>
+              <td class="num">4</td>
+              <td class="num">3</td>
+              <td class="num">2</td>
+              <td class="num score">19</td>
+              <td><span class="tier tier-a">A</span></td>
+            </tr>
+
+            <tr>
+              <td>6</td>
+              <td>Word Shapes</td>
+              <td class="num">4</td>
+              <td class="num">5</td>
+              <td class="num">4</td>
+              <td class="num">4</td>
+              <td class="num">2</td>
+              <td class="num score">19</td>
+              <td><span class="tier tier-a">A</span></td>
+            </tr>
+
+            <tr>
+              <td>7</td>
+              <td>Crossword Jam</td>
+              <td class="num">4</td>
+              <td class="num">4</td>
+              <td class="num">4</td>
+              <td class="num">4</td>
+              <td class="num">2</td>
+              <td class="num score">18</td>
+              <td><span class="tier tier-a">A</span></td>
+            </tr>
+
+            <tr>
+              <td>8</td>
+              <td>Word Bliss</td>
+              <td class="num">5</td>
+              <td class="num">4</td>
+              <td class="num">4</td>
+              <td class="num">3</td>
+              <td class="num">2</td>
+              <td class="num score">18</td>
+              <td><span class="tier tier-a">A</span></td>
+            </tr>
+
+            <tr>
+              <td>9</td>
+              <td>Word Nut</td>
+              <td class="num">5</td>
+              <td class="num">4</td>
+              <td class="num">4</td>
+              <td class="num">3</td>
+              <td class="num">2</td>
+              <td class="num score">18</td>
+              <td><span class="tier tier-a">A</span></td>
+            </tr>
+
+            <tr>
+              <td>10</td>
+              <td>Word Pearls</td>
+              <td class="num">5</td>
+              <td class="num">4</td>
+              <td class="num">4</td>
+              <td class="num">3</td>
+              <td class="num">2</td>
+              <td class="num score">18</td>
+              <td><span class="tier tier-a">A</span></td>
+            </tr>
+
+            <tr>
+              <td>11</td>
+              <td>Word Tour</td>
+              <td class="num">5</td>
+              <td class="num">4</td>
+              <td class="num">4</td>
+              <td class="num">3</td>
+              <td class="num">2</td>
+              <td class="num score">18</td>
+              <td><span class="tier tier-a">A</span></td>
+            </tr>
+
+            <tr>
+              <td>12</td>
+              <td>Word Trip</td>
+              <td class="num">5</td>
+              <td class="num">4</td>
+              <td class="num">4</td>
+              <td class="num">3</td>
+              <td class="num">2</td>
+              <td class="num score">18</td>
+              <td><span class="tier tier-a">A</span></td>
+            </tr>
+
+            <tr>
+              <td>13</td>
+              <td>Words of Wonders</td>
+              <td class="num">4</td>
+              <td class="num">4</td>
+              <td class="num">4</td>
+              <td class="num">4</td>
+              <td class="num">2</td>
+              <td class="num score">18</td>
+              <td><span class="tier tier-a">A</span></td>
+            </tr>
+
+            <tr>
+              <td>14</td>
+              <td>Zen Word</td>
+              <td class="num">5</td>
+              <td class="num">4</td>
+              <td class="num">4</td>
+              <td class="num">3</td>
+              <td class="num">2</td>
+              <td class="num score">18</td>
+              <td><span class="tier tier-a">A</span></td>
+            </tr>
+
+            <tr>
+              <td>15</td>
+              <td>Daily Themed Crossword</td>
+              <td class="num">3</td>
+              <td class="num">4</td>
+              <td class="num">4</td>
+              <td class="num">4</td>
+              <td class="num">2</td>
+              <td class="num score">17</td>
+              <td><span class="tier tier-b">B</span></td>
+            </tr>
+
+            <tr>
+              <td>16</td>
+              <td>Scrabble GO</td>
+              <td class="num">2</td>
+              <td class="num">2</td>
+              <td class="num">4</td>
+              <td class="num">4</td>
+              <td class="num">5</td>
+              <td class="num score">17</td>
+              <td><span class="tier tier-c">C</span></td>
+            </tr>
+
+            <tr>
+              <td>17</td>
+              <td>Word Chums</td>
+              <td class="num">3</td>
+              <td class="num">2</td>
+              <td class="num">4</td>
+              <td class="num">3</td>
+              <td class="num">5</td>
+              <td class="num score">17</td>
+              <td><span class="tier tier-c">C</span></td>
+            </tr>
+
+            <tr>
+              <td>18</td>
+              <td>Word Collect</td>
+              <td class="num">5</td>
+              <td class="num">3</td>
+              <td class="num">4</td>
+              <td class="num">3</td>
+              <td class="num">2</td>
+              <td class="num score">17</td>
+              <td><span class="tier tier-a">A</span></td>
+            </tr>
+
+            <tr>
+              <td>19</td>
+              <td>Word Cookies</td>
+              <td class="num">4</td>
+              <td class="num">5</td>
+              <td class="num">3</td>
+              <td class="num">3</td>
+              <td class="num">2</td>
+              <td class="num score">17</td>
+              <td><span class="tier tier-b">B</span></td>
+            </tr>
+
+            <tr>
+              <td>20</td>
+              <td>Word Domination</td>
+              <td class="num">3</td>
+              <td class="num">2</td>
+              <td class="num">4</td>
+              <td class="num">4</td>
+              <td class="num">4</td>
+              <td class="num score">17</td>
+              <td><span class="tier tier-c">C</span></td>
+            </tr>
+
+            <tr>
+              <td>21</td>
+              <td>Words With Friends 2</td>
+              <td class="num">2</td>
+              <td class="num">2</td>
+              <td class="num">4</td>
+              <td class="num">4</td>
+              <td class="num">5</td>
+              <td class="num score">17</td>
+              <td><span class="tier tier-c">C</span></td>
+            </tr>
+
+            <tr>
+              <td>22</td>
+              <td>Word Farm Adventure</td>
+              <td class="num">4</td>
+              <td class="num">2</td>
+              <td class="num">4</td>
+              <td class="num">4</td>
+              <td class="num">2</td>
+              <td class="num score">16</td>
+              <td><span class="tier tier-b">B</span></td>
+            </tr>
+
+            <tr>
+              <td>23</td>
+              <td>Word Search Explorer</td>
+              <td class="num">4</td>
+              <td class="num">4</td>
+              <td class="num">3</td>
+              <td class="num">3</td>
+              <td class="num">2</td>
+              <td class="num score">16</td>
+              <td><span class="tier tier-b">B</span></td>
+            </tr>
+
+            <tr>
+              <td>24</td>
+              <td>Wordament</td>
+              <td class="num">3</td>
+              <td class="num">3</td>
+              <td class="num">2</td>
+              <td class="num">3</td>
+              <td class="num">4</td>
+              <td class="num score">15</td>
+              <td><span class="tier tier-c">C</span></td>
+            </tr>
+
+            <tr>
+              <td>25</td>
+              <td>CodyCross</td>
+              <td class="num">2</td>
+              <td class="num">3</td>
+              <td class="num">3</td>
+              <td class="num">4</td>
+              <td class="num">2</td>
+              <td class="num score">14</td>
+              <td><span class="tier tier-b">B</span></td>
+            </tr>
+
+            <tr>
+              <td>26</td>
+              <td>WordBrain</td>
+              <td class="num">3</td>
+              <td class="num">3</td>
+              <td class="num">3</td>
+              <td class="num">3</td>
+              <td class="num">2</td>
+              <td class="num score">14</td>
+              <td><span class="tier tier-c">C</span></td>
+            </tr>
+
+            <tr>
+              <td>27</td>
+              <td>Wordfeud</td>
+              <td class="num">2</td>
+              <td class="num">2</td>
+              <td class="num">3</td>
+              <td class="num">2</td>
+              <td class="num">5</td>
+              <td class="num score">14</td>
+              <td><span class="tier tier-c">C</span></td>
+            </tr>
+
+            <tr>
+              <td>28</td>
+              <td>Pictoword</td>
+              <td class="num">2</td>
+              <td class="num">3</td>
+              <td class="num">3</td>
+              <td class="num">3</td>
+              <td class="num">2</td>
+              <td class="num score">13</td>
+              <td><span class="tier tier-c">C</span></td>
+            </tr>
+
+            <tr>
+              <td>29</td>
+              <td>Wordle</td>
+              <td class="num">2</td>
+              <td class="num">1</td>
+              <td class="num">2</td>
+              <td class="num">4</td>
+              <td class="num">4</td>
+              <td class="num score">13</td>
+              <td><span class="tier tier-b">B</span></td>
+            </tr>
+
+            <tr>
+              <td>30</td>
+              <td>4 Pics 1 Word</td>
+              <td class="num">1</td>
+              <td class="num">3</td>
+              <td class="num">3</td>
+              <td class="num">2</td>
+              <td class="num">2</td>
+              <td class="num score">11</td>
+              <td><span class="tier tier-c">C</span></td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="legend">
+        <strong>Легенда критериев (1–5), оценка относительно Wordscapes:</strong>
+        <span><strong>Механика</strong> — соединение букв по кругу и заполнение кроссворд-сетки на уровне. 5 — тот же игровой цикл; 1 — угадывание по изображениям или игровое поле Scrabble</span>
+        <span><strong>Мета</strong> — прогрессия вне основного пазла. 5 — линейные уровни и смена тематики фонов без отдельного строительства; 1 — ферма, дом или коллекции как основной слой прогресса</span>
+        <span><strong>Экономика</strong> — монеты, подсказки, внутриигровые покупки, реклама за вознаграждение; ограничение через жизни или энергию</span>
+        <span><strong>Live-ops</strong> — ежедневные задания, турниры, сезонные события, лимитированные наборы, серии входов</span>
+        <span><strong>Социальные функции</strong> — одиночная игра, таблицы лидеров, асинхронный PvP, команды и обмен результатами</span>
+        <span><strong>Σ/25 и Tier — разные вещи.</strong> Σ показывает, насколько продукт похож на Wordscapes в целом. Tier показывает, <em>что именно</em> у этого тайтла стоит изучать.</span>
+        <span><strong>Tier A</strong> — прямой конкурент: Механика ≥ 4, Экономика ≥ 4 и Мета ≥ 3. Бенчмарк: игровой цикл, подсказки, IAP, баланс уровней.</span>
+        <span><strong>Tier B</strong> — частичный бенчмарк: в A не попадает, но Live-ops ≥ 4 <em>или</em> сильный отдельный слой (мета, контент). Бенчмарк: календарь ивентов, сезонки, прогрессия вне пазла. Пример: CodyCross (14 баллов) — другая механика, но сильные live-ops.</span>
+        <span><strong>Tier C</strong> — та же аудитория, другой продукт: Механика ≤ 2 <em>или</em> Социальные ≥ 5. Бенчмарк: удержание через мультиплеер, не core loop Wordscapes.</span>
+      </div>
+    </section>
+
+    <section id="appmagic">
+      <h2>Данные по играм из AppMagic</h2>
+      <p class="lead">
+        Метрики сняты с AppMagic (июнь 2026). Все цифры в таблице — суммарно по Google Play и App Store.
+        Ссылка «Открыть» ведёт на карточку игры в AppMagic с тем же совокупным срезом.
+      </p>
+      <div class="table-wrap am-table">
+        <table id="appmagic-metrics">
+          <thead>
+            <tr>
+              <th class="am-sortable" data-sort-type="text">Игра<span class="am-sort-icon">⇅</span></th>
+              <th class="am-sortable" data-sort-type="number">Revenue<br>30d<span class="am-sort-icon">⇅</span></th>
+              <th class="am-sortable" data-sort-type="number">Revenue<br>all time<span class="am-sort-icon">⇅</span></th>
+              <th class="am-sortable" data-sort-type="number">Downloads<br>30d<span class="am-sort-icon">⇅</span></th>
+              <th class="am-sortable" data-sort-type="number">Downloads<br>all time<span class="am-sort-icon">⇅</span></th>
+              <th class="am-sortable" data-sort-type="number">RpD<br>Tier-1 West<span class="am-sort-icon">⇅</span></th>
+              <th class="am-sortable" data-sort-type="number">RpD<br>Tier-1 East<span class="am-sort-icon">⇅</span></th>
+              <th class="am-sortable" data-sort-type="number">RpD<br>Global<span class="am-sort-icon">⇅</span></th>
+              <th class="am-sortable am-sort-similarity" data-sort-type="similarity" title="Сортировать по порядку из таблицы схожести">Карточка<span class="am-sort-icon">#</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="am-filled am-tier-mega">
+              <td><strong>Wordscapes</strong></td>
+              <td class="am-val">$1,459,222</td>
+              <td class="am-val">$388,210,004</td>
+              <td class="am-val">846,395</td>
+              <td class="am-val">222,434,346</td>
+              <td class="am-val">$2.68</td>
+              <td class="am-val">$0.87</td>
+              <td class="am-val">$1.75</td>
+              <td><a class="store" href="https://appmagic.rocks/google-play/wordscapes/com.peoplefun.wordcross" target="_blank" rel="noopener">Открыть</a></td>
+            </tr>
+
+            <tr class="am-filled">
+              <td><strong>Word Stacks</strong></td>
+              <td class="am-val">$33,896</td>
+              <td class="am-val">$33,406,316</td>
+              <td class="am-val">8,786</td>
+              <td class="am-val">28,629,975</td>
+              <td class="am-val">$1.27</td>
+              <td class="am-na">—</td>
+              <td class="am-val">$1.17</td>
+              <td><a class="store" href="https://appmagic.rocks/google-play/word-stacks/com.peoplefun.wordstacks" target="_blank" rel="noopener">Открыть</a></td>
+            </tr>
+
+            <tr class="am-filled">
+              <td><strong>Wordscapes In Bloom</strong></td>
+              <td class="am-val">$19,044</td>
+              <td class="am-val">$11,669,607</td>
+              <td class="am-val">8,852</td>
+              <td class="am-val">5,794,031</td>
+              <td class="am-val">$2.59</td>
+              <td class="am-na">—</td>
+              <td class="am-val">$2.01</td>
+              <td><a class="store" href="https://appmagic.rocks/google-play/wordscapes-in-bloom/com.peoplefun.wordflowers" target="_blank" rel="noopener">Открыть</a></td>
+            </tr>
+
+            <tr class="am-filled">
+              <td><strong>Wordscapes Search</strong></td>
+              <td class="am-val">$25,987</td>
+              <td class="am-val">$3,236,212</td>
+              <td class="am-val">298,152</td>
+              <td class="am-val">61,871,415</td>
+              <td class="am-val">$0.07</td>
+              <td class="am-val">$0.09</td>
+              <td class="am-val">$0.05</td>
+              <td><a class="store" href="https://appmagic.rocks/google-play/wordscapes-search-word-games/com.peoplefun.wordsearch" target="_blank" rel="noopener">Открыть</a></td>
+            </tr>
+
+            <tr class="am-filled">
+              <td><strong>Word Connect</strong></td>
+              <td class="am-val">$296,452</td>
+              <td class="am-val">$83,990,642</td>
+              <td class="am-val">217,637</td>
+              <td class="am-val">112,343,966</td>
+              <td class="am-val">$1.66</td>
+              <td class="am-val">$0.60</td>
+              <td class="am-val">$0.75</td>
+              <td><a class="store" href="https://appmagic.rocks/iphone/word-connect-currency/1226926872" target="_blank" rel="noopener">Открыть</a></td>
+            </tr>
+
+            <tr class="am-filled">
+              <td><strong>Word Shapes</strong></td>
+              <td class="am-val">$359</td>
+              <td class="am-val">$501,554</td>
+              <td class="am-val">786</td>
+              <td class="am-val">1,438,722</td>
+              <td class="am-val">$0.30</td>
+              <td class="am-na">—</td>
+              <td class="am-val">$0.35</td>
+              <td><a class="store" href="https://appmagic.rocks/ipad/wordscapes-shapes/1488137829" target="_blank" rel="noopener">Открыть</a></td>
+            </tr>
+
+            <tr class="am-filled">
+              <td><strong>Crossword Jam</strong></td>
+              <td class="am-val">$279,244</td>
+              <td class="am-val">$48,194,135</td>
+              <td class="am-val">151,959</td>
+              <td class="am-val">41,244,101</td>
+              <td class="am-val">$1.83</td>
+              <td class="am-val">$1.45</td>
+              <td class="am-val">$1.17</td>
+              <td><a class="store" href="https://appmagic.rocks/google-play/crossword-jam/in.playsimple.tripcross" target="_blank" rel="noopener">Открыть</a></td>
+            </tr>
+
+            <tr class="am-filled">
+              <td><strong>Word Bliss</strong></td>
+              <td class="am-val">$13,983</td>
+              <td class="am-val">$4,030,424</td>
+              <td class="am-val">7,617</td>
+              <td class="am-val">3,837,953</td>
+              <td class="am-val">$1.14</td>
+              <td class="am-na">—</td>
+              <td class="am-val">$1.05</td>
+              <td><a class="store" href="https://appmagic.rocks/google-play/word-bliss/in.WordSearch.WordBliss" target="_blank" rel="noopener">Открыть</a></td>
+            </tr>
+
+            <tr class="am-filled">
+              <td><strong>Word Nut</strong></td>
+              <td class="am-val">$27,082</td>
+              <td class="am-val">$8,086,347</td>
+              <td class="am-val">115,192</td>
+              <td class="am-val">12,323,742</td>
+              <td class="am-val">$0.79</td>
+              <td class="am-na">—</td>
+              <td class="am-val">$0.66</td>
+              <td><a class="store" href="https://appmagic.rocks/google-play/word-nut/com.chippymediallc.word.nut.android" target="_blank" rel="noopener">Открыть</a></td>
+            </tr>
+
+            <tr class="am-filled">
+              <td><strong>Word Pearls</strong></td>
+              <td class="am-val">$3,245</td>
+              <td class="am-val">$536,910</td>
+              <td class="am-val">17,092</td>
+              <td class="am-val">8,736,954</td>
+              <td class="am-val">$0.10</td>
+              <td class="am-na">—</td>
+              <td class="am-val">$0.06</td>
+              <td><a class="store" href="https://appmagic.rocks/google-play/word-pearls-word-games/com.oakgames.wordgame" target="_blank" rel="noopener">Открыть</a></td>
+            </tr>
+
+            <tr class="am-filled">
+              <td><strong>Word Tour</strong></td>
+              <td class="am-val">$38,612</td>
+              <td class="am-val">$1,137,632</td>
+              <td class="am-val">84,566</td>
+              <td class="am-val">4,483,967</td>
+              <td class="am-val">$0.38</td>
+              <td class="am-na">—</td>
+              <td class="am-val">$0.25</td>
+              <td><a class="store" href="https://appmagic.rocks/google-play/word-tour/in.playsimple.wordtour" target="_blank" rel="noopener">Открыть</a></td>
+            </tr>
+
+            <tr class="am-filled">
+              <td><strong>Word Trip</strong></td>
+              <td class="am-val">$280,478</td>
+              <td class="am-val">$55,764,964</td>
+              <td class="am-val">118,620</td>
+              <td class="am-val">35,906,918</td>
+              <td class="am-val">$1.89</td>
+              <td class="am-val">$1.95</td>
+              <td class="am-val">$1.55</td>
+              <td><a class="store" href="https://appmagic.rocks/google-play/word-trip-word-puzzle-game/in.playsimple.wordtrip" target="_blank" rel="noopener">Открыть</a></td>
+            </tr>
+
+            <tr class="am-filled">
+              <td><strong>Words of Wonders</strong></td>
+              <td class="am-val">$188,536</td>
+              <td class="am-val">$32,476,635</td>
+              <td class="am-val">3,133,184</td>
+              <td class="am-val">406,384,239</td>
+              <td class="am-val">$0.38</td>
+              <td class="am-val">$0.29</td>
+              <td class="am-val">$0.08</td>
+              <td><a class="store" href="https://appmagic.rocks/google-play/words-of-wonders-crossword/com.fugo.wow" target="_blank" rel="noopener">Открыть</a></td>
+            </tr>
+
+            <tr class="am-filled am-tier-mega">
+              <td><strong>Zen Word</strong></td>
+              <td class="am-val">$1,090,207</td>
+              <td class="am-val">$25,393,396</td>
+              <td class="am-val">3,856,022</td>
+              <td class="am-val">69,640,876</td>
+              <td class="am-val">$0.78</td>
+              <td class="am-val">$0.47</td>
+              <td class="am-val">$0.36</td>
+              <td><a class="store" href="https://appmagic.rocks/iphone/zen-word-relax-puzzle-game/1660171117" target="_blank" rel="noopener">Открыть</a></td>
+            </tr>
+
+            <tr class="am-filled">
+              <td><strong>Daily Themed Crossword</strong></td>
+              <td class="am-val">$257,820</td>
+              <td class="am-val">$39,564,654</td>
+              <td class="am-val">236,680</td>
+              <td class="am-val">34,411,693</td>
+              <td class="am-val">$1.19</td>
+              <td class="am-na">—</td>
+              <td class="am-val">$1.15</td>
+              <td><a class="store" href="https://appmagic.rocks/iphone/daily-themed-crossword-puzzles/1197354394" target="_blank" rel="noopener">Открыть</a></td>
+            </tr>
+
+            <tr class="am-filled">
+              <td><strong>Scrabble GO</strong></td>
+              <td class="am-val">$637,991</td>
+              <td class="am-val">$57,592,223</td>
+              <td class="am-val">533,441</td>
+              <td class="am-val">63,630,296</td>
+              <td class="am-val">$1.31</td>
+              <td class="am-val">$0.88</td>
+              <td class="am-val">$0.91</td>
+              <td><a class="store" href="https://appmagic.rocks/google-play/scrabble%28r%29-go-fun-with-words-/com.pieyel.scrabble" target="_blank" rel="noopener">Открыть</a></td>
+            </tr>
+
+            <tr class="am-filled">
+              <td><strong>Word Chums</strong></td>
+              <td class="am-val">$53,571</td>
+              <td class="am-val">$18,988,940</td>
+              <td class="am-val">5,280</td>
+              <td class="am-val">5,606,563</td>
+              <td class="am-val">$4.08</td>
+              <td class="am-na">—</td>
+              <td class="am-val">$3.39</td>
+              <td><a class="store" href="https://appmagic.rocks/google-play/word-chums/com.peoplefun.wordchums" target="_blank" rel="noopener">Открыть</a></td>
+            </tr>
+
+            <tr class="am-filled">
+              <td><strong>Word Collect</strong></td>
+              <td class="am-val">$299,410</td>
+              <td class="am-val">$67,189,409</td>
+              <td class="am-val">52,141</td>
+              <td class="am-val">70,404,386</td>
+              <td class="am-val">$1.56</td>
+              <td class="am-val">$0.60</td>
+              <td class="am-val">$0.95</td>
+              <td><a class="store" href="https://appmagic.rocks/iphone/word-collect-word-search/1299956969" target="_blank" rel="noopener">Открыть</a></td>
+            </tr>
+
+            <tr class="am-filled">
+              <td><strong>Word Cookies</strong></td>
+              <td class="am-val">$463,171</td>
+              <td class="am-val">$83,944,755</td>
+              <td class="am-val">117,408</td>
+              <td class="am-val">88,104,476</td>
+              <td class="am-val">$1.31</td>
+              <td class="am-val">$1.20</td>
+              <td class="am-val">$0.95</td>
+              <td><a class="store" href="https://appmagic.rocks/google-play/word-cookies/com.bitmango.go.wordcookies" target="_blank" rel="noopener">Открыть</a></td>
+            </tr>
+
+            <tr class="am-filled">
+              <td><strong>Word Domination</strong></td>
+              <td class="am-val">$32,419</td>
+              <td class="am-val">$7,304,228</td>
+              <td class="am-val">11,300</td>
+              <td class="am-val">12,068,629</td>
+              <td class="am-val">$0.82</td>
+              <td class="am-val">$1.44</td>
+              <td class="am-val">$0.61</td>
+              <td><a class="store" href="https://appmagic.rocks/iphone/word-domination-pvp-word-game/1237172656" target="_blank" rel="noopener">Открыть</a></td>
+            </tr>
+
+            <tr class="am-filled am-tier-mega">
+              <td><strong>Words With Friends 2</strong></td>
+              <td class="am-val">$1,463,541</td>
+              <td class="am-val">$240,856,307</td>
+              <td class="am-val">253,564</td>
+              <td class="am-val">70,428,104</td>
+              <td class="am-val">$4.22</td>
+              <td class="am-val">$4.76</td>
+              <td class="am-val">$3.42</td>
+              <td><a class="store" href="https://appmagic.rocks/iphone/words-with-friends-word-game/1196764367" target="_blank" rel="noopener">Открыть</a></td>
+            </tr>
+
+            <tr class="am-filled">
+              <td><strong>Word Farm Adventure</strong></td>
+              <td class="am-val">$9,819</td>
+              <td class="am-val">$2,381,969</td>
+              <td class="am-val">62,358</td>
+              <td class="am-val">8,848,053</td>
+              <td class="am-val">$0.31</td>
+              <td class="am-na">—</td>
+              <td class="am-val">$0.27</td>
+              <td><a class="store" href="https://appmagic.rocks/google-play/word-farm-adventure/com.wordfarm.scapes" target="_blank" rel="noopener">Открыть</a></td>
+            </tr>
+
+            <tr class="am-filled">
+              <td><strong>Word Search Explorer</strong></td>
+              <td class="am-val">$81,757</td>
+              <td class="am-val">$5,246,093</td>
+              <td class="am-val">4,530,666</td>
+              <td class="am-val">136,236,975</td>
+              <td class="am-val">$0.10</td>
+              <td class="am-val">$0.10</td>
+              <td class="am-val">$0.05</td>
+              <td><a class="store" href="https://appmagic.rocks/google-play/word-search-explorer/in.playsimple.wordsearch" target="_blank" rel="noopener">Открыть</a></td>
+            </tr>
+
+            <tr class="am-filled">
+              <td><strong>Wordament</strong></td>
+              <td class="am-val">$10,071</td>
+              <td class="am-val">$874,221</td>
+              <td class="am-val">11,554</td>
+              <td class="am-val">2,951,796</td>
+              <td class="am-val">$0.25</td>
+              <td class="am-na">—</td>
+              <td class="am-val">$0.30</td>
+              <td><a class="store" href="https://appmagic.rocks/google-play/wordament%28r%29-by-microsoft/com.microsoft.wordament" target="_blank" rel="noopener">Открыть</a></td>
+            </tr>
+
+            <tr class="am-filled">
+              <td><strong>CodyCross</strong></td>
+              <td class="am-val">$100,509</td>
+              <td class="am-val">$20,542,174</td>
+              <td class="am-val">444,649</td>
+              <td class="am-val">146,500,622</td>
+              <td class="am-val">$0.48</td>
+              <td class="am-val">$0.27</td>
+              <td class="am-val">$0.14</td>
+              <td><a class="store" href="https://appmagic.rocks/google-play/codycross/com.fanatee.cody" target="_blank" rel="noopener">Открыть</a></td>
+            </tr>
+
+            <tr class="am-filled">
+              <td><strong>WordBrain</strong></td>
+              <td class="am-val">$41,719</td>
+              <td class="am-val">$47,009,970</td>
+              <td class="am-val">11,719</td>
+              <td class="am-val">34,396,821</td>
+              <td class="am-val">$1.79</td>
+              <td class="am-val">$2.05</td>
+              <td class="am-val">$1.37</td>
+              <td><a class="store" href="https://appmagic.rocks/google-play/wordbrain/se.maginteractive.wordbrain" target="_blank" rel="noopener">Открыть</a></td>
+            </tr>
+
+            <tr class="am-filled">
+              <td><strong>Wordfeud</strong></td>
+              <td class="am-val">$27,028</td>
+              <td class="am-val">$3,886,078</td>
+              <td class="am-val">52,954</td>
+              <td class="am-val">12,372,559</td>
+              <td class="am-val">$0.33</td>
+              <td class="am-na">—</td>
+              <td class="am-val">$0.31</td>
+              <td><a class="store" href="https://appmagic.rocks/iphone/wordfeud/428312806" target="_blank" rel="noopener">Открыть</a></td>
+            </tr>
+
+            <tr class="am-filled">
+              <td><strong>Pictoword</strong></td>
+              <td class="am-val">$8,159</td>
+              <td class="am-val">$2,643,848</td>
+              <td class="am-val">25,075</td>
+              <td class="am-val">47,096,100</td>
+              <td class="am-val">$0.06</td>
+              <td class="am-val">$0.42</td>
+              <td class="am-val">$0.06</td>
+              <td><a class="store" href="https://appmagic.rocks/iphone/pictoword-fun-word-quiz-games/600674056" target="_blank" rel="noopener">Открыть</a></td>
+            </tr>
+
+            <tr class="am-filled am-tier-mega">
+              <td><strong>Wordle</strong></td>
+              <td class="am-val">$4,199,302</td>
+              <td class="am-val">$173,376,972</td>
+              <td class="am-val">862,778</td>
+              <td class="am-val">47,291,838</td>
+              <td class="am-val">$4.06</td>
+              <td class="am-val">$1.59</td>
+              <td class="am-val">$3.67</td>
+              <td><a class="store" href="https://appmagic.rocks/iphone/nyt-games-wordle-and-crossword/307569751" target="_blank" rel="noopener">Открыть</a></td>
+            </tr>
+
+            <tr class="am-filled">
+              <td><strong>4 Pics 1 Word</strong></td>
+              <td class="am-val">$89,402</td>
+              <td class="am-val">$17,150,362</td>
+              <td class="am-val">398,482</td>
+              <td class="am-val">164,923,797</td>
+              <td class="am-val">$0.22</td>
+              <td class="am-val">$1.19</td>
+              <td class="am-val">$0.10</td>
+              <td><a class="store" href="https://appmagic.rocks/iphone/4-pics-1-word/595558452" target="_blank" rel="noopener">Открыть</a></td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+      <p class="note">
+        <strong>Как читать таблицу.</strong>
+        Доход и установки за 30 дней — за последний месяц, суммарно по обоим сторам (чистый IAP, без рекламы).
+        Доход и установки «за всё время» — накопленные с запуска, тоже по обоим сторам.
+        RpD — сколько в среднем приносит одна установка за всё время: отдельно Запад (Tier-1 West), Восток (Tier-1 East) и весь мир.
+        Жёлтая подсветка строки — доход за 30 дней от $1 млн и выше.
+        Клик по заголовку столбца сортирует таблицу; повторный клик меняет порядок (больше ↔ меньше, А ↔ Я).
+        Клик по <strong>Карточка</strong> — порядок как в таблице схожести (№1 → №30).
+      </p>
+    </section>
+
+    <section id="stores-extended">
+      <h2>Где игра доступна</h2>
+      <p class="lead">30 конкурентов из таблицы схожести — в том же порядке.</p>
+      <div class="table-wrap">
+        <table id="stores-matrix">
+          <thead>
+            <tr>
+              <th class="stores-sort-default" style="cursor:pointer" title="Порядок как в таблице схожести (№1 → №30)">Игра<span class="stores-sort-icon">#</span></th>
+              <th>App Store</th>
+              <th>Google Play</th>
+              <th>Google Play PC</th>
+              <th>Microsoft Store</th>
+              <th>Amazon</th>
+              <th>Mac App Store</th>
+              <th>Веб-версия</th>
+              <th>Facebook</th>
+              <th>Windows (.exe)</th>
+              <th>macOS (.dmg)</th>
+              <th>Steam</th>
+              <th>Galaxy Store</th>
+              <th>AppGallery</th>
+              <th>G5 Store</th>
+              <th>Alt Android</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr><td><a class="store" href="https://www.peoplefun.com/games/wordscapes/" target="_blank" rel="noopener">Wordscapes</a></td><td><a class="store" href="https://apps.apple.com/us/app/wordscapes/id1207472156" target="_blank" rel="noopener">AS</a></td><td><a class="store" href="https://play.google.com/store/apps/details?id=com.peoplefun.wordcross" target="_blank" rel="noopener">GP</a></td><td><a class="store" href="https://play.google.com/pc-store/games/details?id=com.peoplefun.wordcross" target="_blank" rel="noopener">GPG</a></td><td>—</td><td><a class="store" href="https://www.amazon.com/PeopleFun-Inc-Wordscapes/dp/B073TLZSBN" target="_blank" rel="noopener">AMZ</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+
+            <tr><td><a class="store" href="https://www.peoplefun.com/games/" target="_blank" rel="noopener">Word Stacks</a></td><td><a class="store" href="https://apps.apple.com/us/app/word-stacks/id1413942319" target="_blank" rel="noopener">AS</a></td><td><a class="store" href="https://play.google.com/store/apps/details?id=com.peoplefun.wordstacks" target="_blank" rel="noopener">GP</a></td><td><a class="store" href="https://play.google.com/pc-store/games/details?id=com.peoplefun.wordstacks" target="_blank" rel="noopener">GPG</a></td><td>—</td><td><a class="store" href="https://www.amazon.com/PeopleFun-Inc-Word-Stacks/dp/B07GX654BC" target="_blank" rel="noopener">AMZ</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+
+            <tr><td><a class="store" href="https://www.peoplefun.com/games/" target="_blank" rel="noopener">Wordscapes In Bloom</a></td><td><a class="store" href="https://apps.apple.com/us/app/wordscapes-in-bloom/id1313561414" target="_blank" rel="noopener">AS</a></td><td><a class="store" href="https://play.google.com/store/apps/details?id=com.peoplefun.wordflowers" target="_blank" rel="noopener">GP</a></td><td><a class="store" href="https://play.google.com/pc-store/games/details?id=com.peoplefun.wordflowers" target="_blank" rel="noopener">GPG</a></td><td>—</td><td><a class="store" href="https://www.amazon.com/PeopleFun-Inc-Wordscapes-In-Bloom/dp/B079NKR45N" target="_blank" rel="noopener">AMZ</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+
+            <tr><td><a class="store" href="https://www.peoplefun.com/games/" target="_blank" rel="noopener">Wordscapes Search</a></td><td><a class="store" href="https://apps.apple.com/us/app/wordscapes-search/id1420294918" target="_blank" rel="noopener">AS</a></td><td><a class="store" href="https://play.google.com/store/apps/details?id=com.peoplefun.wordsearch" target="_blank" rel="noopener">GP</a></td><td>—</td><td>—</td><td>—</td><td><a class="store" href="https://apps.apple.com/us/app/wordscapes-search-word-game/id1420294918" target="_blank" rel="noopener">MAS</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+
+            <tr><td><a class="store" href="https://zenlifegames.com/" target="_blank" rel="noopener">Word Connect</a></td><td><a class="store" href="https://apps.apple.com/us/app/word-connect/id1226926872" target="_blank" rel="noopener">AS</a></td><td><a class="store" href="https://play.google.com/store/apps/details?id=com.zentertain.wordconnect" target="_blank" rel="noopener">GP</a></td><td>—</td><td>—</td><td><a class="store" href="https://www.amazon.com/Zenjoy-Word-Connect/dp/B0784CXQ5T" target="_blank" rel="noopener">AMZ</a></td><td><a class="store" href="https://apps.apple.com/us/app/word-connect/id1226926872" target="_blank" rel="noopener">MAS</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+
+            <tr><td><a class="store" href="https://www.peoplefun.com/games/" target="_blank" rel="noopener">Word Shapes</a></td><td><a class="store" href="https://apps.apple.com/us/app/word-shapes/id1463366194" target="_blank" rel="noopener">AS</a></td><td><a class="store" href="https://play.google.com/store/apps/details?id=com.peoplefun.wordshapes" target="_blank" rel="noopener">GP</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+
+            <tr><td><a class="store" href="https://playsimple.in/games/crossword-jam" target="_blank" rel="noopener">Crossword Jam</a></td><td><a class="store" href="https://apps.apple.com/us/app/crossword-jam-fun-word-search/id1269540854" target="_blank" rel="noopener">AS</a></td><td><a class="store" href="https://play.google.com/store/apps/details?id=in.playsimple.tripcross" target="_blank" rel="noopener">GP</a></td><td>—</td><td>—</td><td><a class="store" href="https://www.amazon.com/Play-Simple-Word-Jam/dp/B079DLT5X3" target="_blank" rel="noopener">AMZ</a></td><td><a class="store" href="https://apps.apple.com/us/app/crossword-jam-fun-word-search/id1269540854" target="_blank" rel="noopener">MAS</a></td><td>—</td><td><a class="store" href="https://www.facebook.com/gaming/play/crossword_jam_ig" target="_blank" rel="noopener">FB</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+
+            <tr><td><a class="store" href="https://playsimple.in/" target="_blank" rel="noopener">Word Bliss</a></td><td><a class="store" href="https://apps.apple.com/us/app/word-bliss-from-playsimple/id1465591510" target="_blank" rel="noopener">AS</a></td><td><a class="store" href="https://play.google.com/store/apps/details?id=in.WordSearch.WordBliss" target="_blank" rel="noopener">GP</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+
+            <tr><td><a class="store" href="https://superfree.com/" target="_blank" rel="noopener">Word Nut</a></td><td><a class="store" href="https://apps.apple.com/us/app/word-nut-crossword-puzzle-game/id1379080711" target="_blank" rel="noopener">AS</a></td><td><a class="store" href="https://play.google.com/store/apps/details?id=com.chippymediallc.word.nut.android" target="_blank" rel="noopener">GP</a></td><td>—</td><td>—</td><td>—</td><td><a class="store" href="https://apps.apple.com/us/app/word-nut-crossword-puzzle-game/id1379080711" target="_blank" rel="noopener">MAS</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+
+            <tr><td><a class="store" href="https://unicostudio.co/" target="_blank" rel="noopener">Word Pearls</a></td><td><a class="store" href="https://apps.apple.com/us/app/word-pearls-word-games/id1467451327" target="_blank" rel="noopener">AS</a></td><td><a class="store" href="https://play.google.com/store/apps/details?id=com.oakgames.wordgame" target="_blank" rel="noopener">GP</a></td><td><a class="store" href="https://play.google.com/pc-store/games/details?id=com.oakgames.wordgame" target="_blank" rel="noopener">GPG</a></td><td>—</td><td>—</td><td><a class="store" href="https://apps.apple.com/us/app/word-pearls-word-games/id1467451327" target="_blank" rel="noopener">MAS</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+
+            <tr><td><a class="store" href="https://playsimple.in/" target="_blank" rel="noopener">Word Tour</a></td><td><a class="store" href="https://apps.apple.com/us/app/word-tour-word-puzzle/id6599847974" target="_blank" rel="noopener">AS</a></td><td><a class="store" href="https://play.google.com/store/apps/details?id=in.playsimple.wordtour" target="_blank" rel="noopener">GP</a></td><td>—</td><td>—</td><td>—</td><td><a class="store" href="https://apps.apple.com/us/app/word-tour-word-puzzle/id6599847974" target="_blank" rel="noopener">MAS</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+
+            <tr><td><a class="store" href="https://playsimple.in/games/word-trip" target="_blank" rel="noopener">Word Trip</a></td><td><a class="store" href="https://apps.apple.com/us/app/word-trip/id1214223596" target="_blank" rel="noopener">AS</a></td><td><a class="store" href="https://play.google.com/store/apps/details?id=in.playsimple.wordtrip" target="_blank" rel="noopener">GP</a></td><td>—</td><td>—</td><td><a class="store" href="https://www.amazon.com/Play-Simple-Word-Trip/dp/B079DLY36T" target="_blank" rel="noopener">AMZ</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+
+            <tr><td><a class="store" href="https://www.fugo.com.tr/" target="_blank" rel="noopener">Words of Wonders</a></td><td><a class="store" href="https://apps.apple.com/us/app/words-of-wonders-crossword/id1369521645" target="_blank" rel="noopener">AS</a></td><td><a class="store" href="https://play.google.com/store/apps/details?id=com.fugo.wow" target="_blank" rel="noopener">GP</a></td><td><a class="store" href="https://play.google.com/pc-store/games/details?id=com.fugo.wow" target="_blank" rel="noopener">GPG</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+
+            <tr><td><a class="store" href="https://oakevergames.com/" target="_blank" rel="noopener">Zen Word</a></td><td><a class="store" href="https://apps.apple.com/us/app/zen-word-relax-puzzle-game/id1660171117" target="_blank" rel="noopener">AS</a></td><td><a class="store" href="https://play.google.com/store/apps/details?id=kidultlovin.word.zen" target="_blank" rel="noopener">GP</a></td><td>—</td><td>—</td><td><a class="store" href="https://www.amazon.com/Zen-Word-Relax-Puzzle-Game/dp/B0CLKCR8WH" target="_blank" rel="noopener">AMZ</a></td><td><a class="store" href="https://apps.apple.com/us/app/zen-word-relax-puzzle-game/id1660171117" target="_blank" rel="noopener">MAS</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+
+            <tr><td><a class="store" href="https://playsimple.in/games/daily-themed-crossword" target="_blank" rel="noopener">Daily Themed Crossword</a></td><td><a class="store" href="https://apps.apple.com/us/app/daily-themed-crossword-puzzles/id1197354394" target="_blank" rel="noopener">AS</a></td><td><a class="store" href="https://play.google.com/store/apps/details?id=in.crossy.daily_crossword" target="_blank" rel="noopener">GP</a></td><td>—</td><td>—</td><td><a class="store" href="https://www.amazon.com/Daily-Themed-Crossword-cross-word/dp/B079FRT399" target="_blank" rel="noopener">AMZ</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+
+            <tr><td><a class="store" href="https://www.scrabblego.com/" target="_blank" rel="noopener">Scrabble GO</a></td><td><a class="store" href="https://apps.apple.com/us/app/scrabble-go-fun-with-words/id1215933788" target="_blank" rel="noopener">AS</a></td><td><a class="store" href="https://play.google.com/store/apps/details?id=com.scopely.scrabble" target="_blank" rel="noopener">GP</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td><a class="store" href="https://playscrabble.com/" target="_blank" rel="noopener">H5</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+
+            <tr><td><a class="store" href="https://www.peoplefun.com/games/" target="_blank" rel="noopener">Word Chums</a></td><td><a class="store" href="https://apps.apple.com/us/app/word-chums/id517840944" target="_blank" rel="noopener">AS</a></td><td><a class="store" href="https://play.google.com/store/apps/details?id=com.peoplefun.wordchums" target="_blank" rel="noopener">GP</a></td><td><a class="store" href="https://play.google.com/pc-store/games/details?id=com.peoplefun.wordchums" target="_blank" rel="noopener">GPG</a></td><td>—</td><td><a class="store" href="https://www.amazon.com/PeopleFun-Inc-Word-Chums/dp/B00FX6ZBXC" target="_blank" rel="noopener">AMZ</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+
+            <tr><td><a class="store" href="https://superfree.com/games/word-collect/" target="_blank" rel="noopener">Word Collect</a></td><td><a class="store" href="https://apps.apple.com/us/app/word-collect-word-search/id1299956969" target="_blank" rel="noopener">AS</a></td><td><a class="store" href="https://play.google.com/store/apps/details?id=com.superluckycasino.wordcollect" target="_blank" rel="noopener">GP</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+
+            <tr><td><a class="store" href="https://www.bitmango.com/" target="_blank" rel="noopener">Word Cookies</a></td><td><a class="store" href="https://apps.apple.com/us/app/word-cookies/id1153883316" target="_blank" rel="noopener">AS</a></td><td><a class="store" href="https://play.google.com/store/apps/details?id=com.bitmango.go.wordcookies" target="_blank" rel="noopener">GP</a></td><td>—</td><td><a class="store" href="https://apps.microsoft.com/detail/9n724c9kllzb" target="_blank" rel="noopener">MS</a></td><td><a class="store" href="https://www.amazon.com/Bitmango-Word-Cookies/dp/B07Q2N9Q7B" target="_blank" rel="noopener">AMZ</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+
+            <tr><td><a class="store" href="https://www.maginteractive.com/games/word-domination/" target="_blank" rel="noopener">Word Domination</a></td><td><a class="store" href="https://apps.apple.com/us/app/word-domination-pvp-word-game/id1237172656" target="_blank" rel="noopener">AS</a></td><td><a class="store" href="https://play.google.com/store/apps/details?id=se.maginteractive.worddomination" target="_blank" rel="noopener">GP</a></td><td>—</td><td>—</td><td>—</td><td><a class="store" href="https://apps.apple.com/us/app/word-domination-pvp-word-game/id1237172656" target="_blank" rel="noopener">MAS</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+
+            <tr><td><a class="store" href="https://www.zynga.com/games/words-with-friends-2/" target="_blank" rel="noopener">Words With Friends 2</a></td><td><a class="store" href="https://apps.apple.com/us/app/words-with-friends-word-game/id1196764367" target="_blank" rel="noopener">AS</a></td><td><a class="store" href="https://play.google.com/store/apps/details?id=com.zynga.words3" target="_blank" rel="noopener">GP</a></td><td>—</td><td>—</td><td><a class="store" href="https://www.amazon.com/Zynga-Game-Network-Words-Friends/dp/B00T6OFVO6" target="_blank" rel="noopener">AMZ</a></td><td>—</td><td><a class="store" href="http://www.wordswithfriends.com/" target="_blank" rel="noopener">H5</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+
+            <tr><td><a class="store" href="https://braingames.net/" target="_blank" rel="noopener">Word Farm Adventure</a></td><td><a class="store" href="https://apps.apple.com/us/app/word-farm-adventure/id1481009631" target="_blank" rel="noopener">AS</a></td><td><a class="store" href="https://play.google.com/store/apps/details?id=com.wordfarm.scapes" target="_blank" rel="noopener">GP</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+
+            <tr><td><a class="store" href="https://playsimple.co/games/word-search" target="_blank" rel="noopener">Word Search Explorer</a></td><td><a class="store" href="https://apps.apple.com/us/app/word-search-explorer/id1602508478" target="_blank" rel="noopener">AS</a></td><td><a class="store" href="https://play.google.com/store/apps/details?id=in.playsimple.wordsearch" target="_blank" rel="noopener">GP</a></td><td>—</td><td>—</td><td><a class="store" href="https://www.amazon.com/dp/B0CK1L4F9W" target="_blank" rel="noopener">AMZ</a></td><td><a class="store" href="https://apps.apple.com/us/app/word-search-explorer/id1602508478" target="_blank" rel="noopener">MAS</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+
+            <tr><td><a class="store" href="https://www.microsoftcasualgames.com/" target="_blank" rel="noopener">Wordament</a></td><td><a class="store" href="https://apps.apple.com/us/app/microsoft-wordament/id580935508" target="_blank" rel="noopener">AS</a></td><td><a class="store" href="https://play.google.com/store/apps/details?id=com.microsoft.wordament" target="_blank" rel="noopener">GP</a></td><td>—</td><td><a class="store" href="https://apps.microsoft.com/detail/9wzdncrfhwfg" target="_blank" rel="noopener">MS</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+
+            <tr><td><a class="store" href="https://www.fanatee.com/codycross" target="_blank" rel="noopener">CodyCross</a></td><td><a class="store" href="https://apps.apple.com/us/app/codycross-crossword-puzzles/id1092689152" target="_blank" rel="noopener">AS</a></td><td><a class="store" href="https://play.google.com/store/apps/details?id=com.fanatee.cody" target="_blank" rel="noopener">GP</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+
+            <tr><td><a class="store" href="https://www.maginteractive.com/games/wordbrain/" target="_blank" rel="noopener">WordBrain</a></td><td><a class="store" href="https://apps.apple.com/us/app/wordbrain-classic-word-puzzle/id708600202" target="_blank" rel="noopener">AS</a></td><td><a class="store" href="https://play.google.com/store/apps/details?id=se.maginteractive.wordbrain" target="_blank" rel="noopener">GP</a></td><td><a class="store" href="https://play.google.com/pc-store/games/details?id=se.maginteractive.wordbrain" target="_blank" rel="noopener">GPG</a></td><td>—</td><td>—</td><td><a class="store" href="https://apps.apple.com/us/app/wordbrain-classic-word-puzzle/id708600202" target="_blank" rel="noopener">MAS</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+
+            <tr><td><a class="store" href="https://wordfeud.com/" target="_blank" rel="noopener">Wordfeud</a></td><td><a class="store" href="https://apps.apple.com/us/app/wordfeud/id428312806" target="_blank" rel="noopener">AS</a></td><td><a class="store" href="https://play.google.com/store/apps/details?id=com.wordfeud.full" target="_blank" rel="noopener">GP</a></td><td><a class="store" href="https://play.google.com/pc-store/games/details?id=com.hbwares.wordfeud.free" target="_blank" rel="noopener">GPG</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+
+            <tr><td><a class="store" href="https://kooapps.com/" target="_blank" rel="noopener">Pictoword</a></td><td><a class="store" href="https://apps.apple.com/us/app/pictoword-fun-word-quiz-games/id600674056" target="_blank" rel="noopener">AS</a></td><td><a class="store" href="https://play.google.com/store/apps/details?id=com.kooapps.pictowordandroid" target="_blank" rel="noopener">GP</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+
+            <tr><td><a class="store" href="https://www.nytimes.com/games/wordle" target="_blank" rel="noopener">Wordle</a></td><td><a class="store" href="https://apps.apple.com/us/app/nyt-games-wordle-crossword/id307569751" target="_blank" rel="noopener">AS</a></td><td><a class="store" href="https://play.google.com/store/apps/details?id=com.nytimes.crossword" target="_blank" rel="noopener">GP</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td><a class="store" href="https://www.nytimes.com/games/wordle" target="_blank" rel="noopener">H5</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+
+            <tr><td><a class="store" href="https://www.lotum.com/" target="_blank" rel="noopener">4 Pics 1 Word</a></td><td><a class="store" href="https://apps.apple.com/us/app/4-pics-1-word/id595558452" target="_blank" rel="noopener">AS</a></td><td><a class="store" href="https://play.google.com/store/apps/details?id=de.lotum.whatsinthefoto.us" target="_blank" rel="noopener">GP</a></td><td><a class="store" href="https://play.google.com/pc-store/games/details?id=de.lotum.whatsinthefoto.us" target="_blank" rel="noopener">GPG</a></td><td><a class="store" href="https://apps.microsoft.com/detail/9nrv2p37thp1" target="_blank" rel="noopener">MS</a></td><td>—</td><td><a class="store" href="https://apps.apple.com/us/app/4-pics-1-word/id595558452" target="_blank" rel="noopener">MAS</a></td><td>—</td><td><a class="store" href="https://www.facebook.com/gaming/play/498625833822107" target="_blank" rel="noopener">FB</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div hidden data-agent-notes="stores-verification">
+      <p class="note">
+        <strong>Amazon Appstore (июнь 2026):</strong> колонка — только официальное приложение в Amazon Appstore (Fire Tablet / Fire TV) с тем же издателем, что и мобильная версия. Не считаем: клоны с похожим названием, физические книги/настолки, sideload APK.
+        Подтверждены (12 из 30): <strong>Wordscapes</strong>, <strong>Word Stacks</strong>, <strong>Wordscapes In Bloom</strong>, <strong>Word Chums</strong> — PeopleFun; <strong>Word Connect</strong> — ZenLife Games; <strong>Crossword Jam</strong>, <strong>Word Trip</strong>, <strong>Daily Themed Crossword</strong>, <strong>Word Search Explorer</strong> — PlaySimple; <strong>Zen Word</strong> — OAKEVER GAMES; <strong>Word Cookies</strong> — BitMango; <strong>Words With Friends 2</strong> — Zynga Game Network.
+        Отклонены: 4 Pics 1 Word (клоны Go Apps / ServeSilicon, не LOTUM); Wordle (нет NYT в Amazon); Wordament (нет листинга Microsoft в Amazon, только MS Store/GP/AS).
+        У остальных 18 — только iOS/Android и/или GPG; Fanatee, MAG, Scopely, Fugo, Unico, Super Lucky, Kooapps, PlaySimple (Word Bliss/Word Tour) в Amazon не найдены.
+        <strong>Microsoft Store (июнь 2026):</strong> колонка — только нативное UWP/Win32-приложение в Microsoft Store с тем же издателем, что и мобильная версия. Не считаем: клоны с похожим названием, Google Play Games (PC) — это отдельная колонка GPG, эмуляторы.
+        Подтверждены (3 из 30): <strong>Wordament</strong> — бандл Microsoft Ultimate Word Games (Xbox Game Studios; отдельная карточка Wordament снята, 410 Gone); <strong>Word Cookies</strong> — BitMango; <strong>4 Pics 1 Word</strong> — LOTUM GmbH.
+        Отклонены как не те игры: Word Connect (Riz, не ZenLife); Wordle Game (Reflection IT, не NYT); Guess The Word / 4 Pics One Word (сторонние издатели).
+        У остальных 27 — только мобильные сторы и/или GPG; PeopleFun, PlaySimple, Fanatee, MAG, Zynga, Scopely нативных листингов в MS не имеют.
+        <strong>Mac App Store (июнь 2026):</strong> колонка — только если в карточке App Store в блоке Compatibility есть строка «MacRequires macOS … and a Mac with Apple M1 chip or later» (iOS-приложение, доступное в Mac App Store на Apple Silicon). Не считаем: просто наличие iOS-версии, веб, Google Play Games для PC, эмуляторы, отдельные .dmg.
+        Подтверждены (11 из 30): <strong>Word Connect</strong> — ZenLife; <strong>Wordscapes Search</strong>, <strong>Crossword Jam</strong>, <strong>Word Tour</strong>, <strong>Word Search Explorer</strong> — PlaySimple; <strong>Word Nut</strong> — Super Lucky; <strong>Word Pearls</strong> — Unico; <strong>Zen Word</strong> — OAKEVER; <strong>Word Domination</strong>, <strong>WordBrain</strong> — MAG Interactive; <strong>4 Pics 1 Word</strong> — LOTUM.
+        Отклонены (19): PeopleFun (<strong>Wordscapes</strong>, <strong>Word Stacks</strong>, <strong>Wordscapes In Bloom</strong>, <strong>Word Chums</strong>) — в Compatibility только iPhone/iPad; PlaySimple (<strong>Word Bliss</strong>, <strong>Word Trip</strong>, <strong>Daily Themed Crossword</strong>) — без Mac; <strong>Wordle</strong> (NYT Games id307569751) — только iOS/iPad, NYT не включил Mac; <strong>Word Cookies</strong>, <strong>Scrabble GO</strong>, <strong>Words With Friends 2</strong>, <strong>CodyCross</strong>, <strong>Wordament</strong>, <strong>Wordfeud</strong>, <strong>Pictoword</strong>, <strong>Words of Wonders</strong>, <strong>Word Collect</strong>, <strong>Word Farm Adventure</strong> — без MacRequires.
+        <strong>Word Shapes</strong> — листинг PeopleFun в US App Store не найден (id1463366194 / id1488137829 — 404); Mac —.
+        При проверке исправлены неверные App Store ID в колонке AS (раньше вели на чужие приложения): Word Stacks, Word Connect, Crossword Jam, Word Bliss, Word Nut, Word Pearls, Word Tour, Words of Wonders, Scrabble GO, Word Collect, Word Cookies, WWF2, Word Farm Adventure, Word Search Explorer, Wordament, CodyCross, WordBrain, Wordle.
+        <strong>Facebook (июнь 2026):</strong> колонка — только игра <em>внутри</em> Facebook (Instant Games / Canvas «Play Game»), не вход через FB в мобильном приложении.
+        Подтверждены: <strong>Crossword Jam</strong>, <strong>4 Pics 1 Word</strong>.
+        Сняты с FB-платформы (официально): Words With Friends 2 → wordswithfriends.com; Word Chums — только приложение; Scrabble GO — с 13.06.2024.
+        У остальных 25 тайтлов — мобильные сторы + опционально FB-логин для синка прогресса, без версии для игры в ленте/Play Games.
+        <strong>Особые случаи:</strong> Wordle — веб на nytimes.com, приложения NYT только iOS/Android.
+        Колонки Windows (.exe) и macOS (.dmg) — только прямые установщики, не карточки магазинов.
+      </p>
+      </div>
+    </section>
+
+
+
+
+
+    <section id="adintel-source-share">
+      <h2>AppMagic Ad Intelligence — доли источников трафика (90d)</h2>
+      <p class="lead">Доли показов по рекламным сетям за 90 дней (AppMagic Ad Intelligence, Worldwide). В ячейке: сверху показы, снизу доля в процентах. Клик по заголовку столбца — сортировка.</p>
+      <h3>Android</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Игра</th>
+              <th>Всего показов</th>
+              <th>Applovin</th>
+              <th>Google AdMob</th>
+              <th>Meta</th>
+              <th>Adikteev</th>
+              <th>Remerge</th>
+              <th>Moloco</th>
+              <th>Unity</th>
+              <th>YouTube</th>
+              <th>Liftoff</th>
+              <th>Mintegral</th>
+              <th>Mobvista</th>
+              <th>IronSource</th>
+              <th>TikTok</th>
+              <th>Opera Ads</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=1_com.peoplefun.wordcross&platform=android" target="_blank" rel="noopener">Wordscapes</a></td>
+              <td>8.6M</td><td>6.6M<br>77%</td><td>1.7M<br>20%</td><td>—</td><td>—</td><td>—</td><td>6.9K<br><1%</td><td>937<br><1%</td><td>34.9K<br><1%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>727<br><1%</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=1_com.peoplefun.wordstacks&platform=android" target="_blank" rel="noopener">Word Stacks</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=1_com.peoplefun.wordflowers&platform=android" target="_blank" rel="noopener">Wordscapes In Bloom</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=1_com.peoplefun.wordsearch&platform=android" target="_blank" rel="noopener">Wordscapes Search</a></td>
+              <td>377K</td><td>356K<br>94%</td><td>518<br><1%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=1_com.zentertain.wordconnect&platform=android" target="_blank" rel="noopener">Word Connect</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=1_com.peoplefun.wordshapes&platform=android" target="_blank" rel="noopener">Word Shapes</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=1_in.playsimple.tripcross&platform=android" target="_blank" rel="noopener">Crossword Jam</a></td>
+              <td>215K</td><td>13.5K<br>6%</td><td>170K<br>79%</td><td>—</td><td>—</td><td>—</td><td>661<br><1%</td><td>—</td><td>7.4K<br>3%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=1_in.WordSearch.WordBliss&platform=android" target="_blank" rel="noopener">Word Bliss</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=1_com.chippymediallc.word.nut.android&platform=android" target="_blank" rel="noopener">Word Nut</a></td>
+              <td>1.8M</td><td>1.3M<br>71%</td><td>104K<br>6%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>6.3K<br><1%</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=1_com.oakgames.wordgame&platform=android" target="_blank" rel="noopener">Word Pearls</a></td>
+              <td>14</td><td>—</td><td>—</td><td>14<br>100%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=1_in.playsimple.wordtour&platform=android" target="_blank" rel="noopener">Word Tour</a></td>
+              <td>1.1M</td><td>902K<br>85%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>2.3K<br><1%</td><td>1.5K<br><1%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>6.1K<br><1%</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=1_in.playsimple.wordtrip&platform=android" target="_blank" rel="noopener">Word Trip</a></td>
+              <td>12.4M</td><td>70<br><1%</td><td>269K<br>2%</td><td>12.1M<br>98%</td><td>—</td><td>—</td><td>29.4K<br><1%</td><td>—</td><td>115<br><1%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=1_com.fugo.wow&platform=android" target="_blank" rel="noopener">Words of Wonders</a></td>
+              <td>207M</td><td>5.3M<br>3%</td><td>147M<br>71%</td><td>17.9M<br>9%</td><td>—</td><td>—</td><td>—</td><td>27.5K<br><1%</td><td>22.7M<br>11%</td><td>—</td><td>5.4M<br>3%</td><td>3.4M<br><2%</td><td>—</td><td>14.9K<br><1%</td><td>8<br><1%</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=1_kidultlovin.word.zen&platform=android" target="_blank" rel="noopener">Zen Word</a></td>
+              <td>230M</td><td>122M<br>53%</td><td>197K<br><1%</td><td>84.7M<br>37%</td><td>—</td><td>—</td><td>—</td><td>1.5M<br><1%</td><td>16.8M<br>7%</td><td>—</td><td>1.9M<br><1%</td><td>316K<br><1%</td><td>—</td><td>2.1K<br><1%</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=1_in.crossy.daily_crossword&platform=android" target="_blank" rel="noopener">Daily Themed Crossword</a></td>
+              <td>21.3M</td><td>—</td><td>928K<br>4%</td><td>20.3M<br>95%</td><td>—</td><td>—</td><td>20.7K<br><1%</td><td>38.5K<br><1%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=1_com.scopely.scrabble&platform=android" target="_blank" rel="noopener">Scrabble GO</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=1_com.peoplefun.wordchums&platform=android" target="_blank" rel="noopener">Word Chums</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=1_com.superluckycasino.wordcollect&platform=android" target="_blank" rel="noopener">Word Collect</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=1_com.bitmango.go.wordcookies&platform=android" target="_blank" rel="noopener">Word Cookies</a></td>
+              <td>7.9M</td><td>5.2M<br>66%</td><td>13.9K<br><1%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>2.2M<br>28%</td><td>—</td><td>—</td><td>406K<br>5%</td><td>86.9K<br><2%</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=1_se.maginteractive.worddomination&platform=android" target="_blank" rel="noopener">Word Domination</a></td>
+              <td>8.6K</td><td>—</td><td>8.6K<br>100%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=1_com.zynga.words3&platform=android" target="_blank" rel="noopener">Words With Friends 2</a></td>
+              <td>97M</td><td>521K<br><1%</td><td>89M<br>92%</td><td>5.4M<br>6%</td><td>893K<br><1%</td><td>—</td><td>451K<br><1%</td><td>—</td><td>178K<br><1%</td><td>—</td><td>262K<br><1%</td><td>92.5K<br><1%</td><td>789<br><1%</td><td>44.7K<br><1%</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=1_com.wordfarm.scapes&platform=android" target="_blank" rel="noopener">Word Farm Adventure</a></td>
+              <td>89.2K</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>89.2K<br>100%</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=1_in.playsimple.wordsearch&platform=android" target="_blank" rel="noopener">Word Search Explorer</a></td>
+              <td>6.7M</td><td>138K<br>2%</td><td>1.8M<br>27%</td><td>3.8M<br>57%</td><td>—</td><td>—</td><td>161K<br>2%</td><td>664K<br>10%</td><td>7.5K<br><1%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=1_com.microsoft.wordament&platform=android" target="_blank" rel="noopener">Wordament</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=1_com.fanatee.cody&platform=android" target="_blank" rel="noopener">CodyCross</a></td>
+              <td>37.1M</td><td>27.7M<br>74%</td><td>95.1K<br><1%</td><td>1.1M<br>3%</td><td>—</td><td>—</td><td>—</td><td>13.9K<br><1%</td><td>—</td><td>—</td><td>452K<br><2%</td><td>45.5K<br><1%</td><td>—</td><td>79<br><1%</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=1_se.maginteractive.wordbrain&platform=android" target="_blank" rel="noopener">WordBrain</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=1_com.wordfeud.full&platform=android" target="_blank" rel="noopener">Wordfeud</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=1_com.kooapps.pictowordandroid&platform=android" target="_blank" rel="noopener">Pictoword</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=1_com.nytimes.crossword&platform=android" target="_blank" rel="noopener">Wordle</a></td>
+              <td>17.9M</td><td>—</td><td>171K<br><1%</td><td>17.7M<br>99%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>21.8K<br><1%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=1_de.lotum.whatsinthefoto.us&platform=android" target="_blank" rel="noopener">4 Pics 1 Word</a></td>
+              <td>3.3M</td><td>46.1K<br><2%</td><td>2.7K<br><1%</td><td>3.2M<br>98%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>4<br><1%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>iOS</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Игра</th>
+              <th>Всего показов</th>
+              <th>Applovin</th>
+              <th>Google AdMob</th>
+              <th>Meta</th>
+              <th>Adikteev</th>
+              <th>Remerge</th>
+              <th>Moloco</th>
+              <th>Unity</th>
+              <th>YouTube</th>
+              <th>Liftoff</th>
+              <th>Mintegral</th>
+              <th>Mobvista</th>
+              <th>IronSource</th>
+              <th>TikTok</th>
+              <th>Opera Ads</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=2_1207472156&platform=ios" target="_blank" rel="noopener">Wordscapes</a></td>
+              <td>18.8M</td><td>18.1M<br>96%</td><td>468<br><1%</td><td>—</td><td>—</td><td>—</td><td>40.5K<br><1%</td><td>4K<br><1%</td><td>843<br><1%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>658K<br>3%</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=2_1413942319&platform=ios" target="_blank" rel="noopener">Word Stacks</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=2_1313561414&platform=ios" target="_blank" rel="noopener">Wordscapes In Bloom</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=2_1420294918&platform=ios" target="_blank" rel="noopener">Wordscapes Search</a></td>
+              <td>604K</td><td>419K<br>69%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=2_1226926872&platform=ios" target="_blank" rel="noopener">Word Connect</a></td>
+              <td>11.2M</td><td>53.5K<br><1%</td><td>—</td><td>10.3M<br>92%</td><td>—</td><td>—</td><td>—</td><td>59.6K<br><1%</td><td>—</td><td>—</td><td>548K<br>5%</td><td>227K<br>2%</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=2_1463366194&platform=ios" target="_blank" rel="noopener">Word Shapes</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=2_1269540854&platform=ios" target="_blank" rel="noopener">Crossword Jam</a></td>
+              <td>3.3M</td><td>513<br><1%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>11.9K<br><1%</td><td>43.5K<br><2%</td><td>—</td><td>—</td><td>2.2M<br>68%</td><td>1M<br>31%</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=2_1465591510&platform=ios" target="_blank" rel="noopener">Word Bliss</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=2_1379080711&platform=ios" target="_blank" rel="noopener">Word Nut</a></td>
+              <td>156K</td><td>58.2K<br>37%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=2_1467451327&platform=ios" target="_blank" rel="noopener">Word Pearls</a></td>
+              <td>77.4K</td><td>49K<br>63%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>28.4K<br>37%</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=2_6599847974&platform=ios" target="_blank" rel="noopener">Word Tour</a></td>
+              <td>50.9K</td><td>16.6K<br>33%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>2.3K<br>5%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=2_1214223596&platform=ios" target="_blank" rel="noopener">Word Trip</a></td>
+              <td>7.6M</td><td>—</td><td>—</td><td>6.9M<br>90%</td><td>—</td><td>—</td><td>735K<br>10%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=2_1369521645&platform=ios" target="_blank" rel="noopener">Words of Wonders</a></td>
+              <td>51.4M</td><td>6.5M<br>13%</td><td>161K<br><1%</td><td>30.5M<br>59%</td><td>—</td><td>—</td><td>20.6K<br><1%</td><td>43.7K<br><1%</td><td>2.1M<br>4%</td><td>—</td><td>9.9M<br>19%</td><td>2.1M<br>4%</td><td>—</td><td>13.8K<br><1%</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=2_1660171117&platform=ios" target="_blank" rel="noopener">Zen Word</a></td>
+              <td>53.8M</td><td>9.8M<br>18%</td><td>2.9K<br><1%</td><td>43M<br>80%</td><td>—</td><td>—</td><td>190K<br><1%</td><td>5K<br><1%</td><td>2K<br><1%</td><td>—</td><td>328K<br><1%</td><td>125K<br><1%</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=2_1197354394&platform=ios" target="_blank" rel="noopener">Daily Themed Crossword</a></td>
+              <td>6.1M</td><td>—</td><td>—</td><td>6.1M<br>100%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=2_1215933788&platform=ios" target="_blank" rel="noopener">Scrabble GO</a></td>
+              <td>26.4M</td><td>132K<br><1%</td><td>7.1M<br>27%</td><td>—</td><td>—</td><td>—</td><td>20.3K<br><1%</td><td>—</td><td>1M<br>4%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>17.7K<br><1%</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=2_517840944&platform=ios" target="_blank" rel="noopener">Word Chums</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=2_1299956969&platform=ios" target="_blank" rel="noopener">Word Collect</a></td>
+              <td>797K</td><td>471K<br>59%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=2_1153883316&platform=ios" target="_blank" rel="noopener">Word Cookies</a></td>
+              <td>1.7M</td><td>116K<br>7%</td><td>15.5K<br><1%</td><td>—</td><td>—</td><td>—</td><td>17.2K<br><2%</td><td>1.5M<br>90%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=2_1237172656&platform=ios" target="_blank" rel="noopener">Word Domination</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=2_1196764367&platform=ios" target="_blank" rel="noopener">Words With Friends 2</a></td>
+              <td>22.8M</td><td>1.6M<br>7%</td><td>235<br><1%</td><td>—</td><td>—</td><td>—</td><td>18.7K<br><1%</td><td>371<br><1%</td><td>187K<br><1%</td><td>—</td><td>3.1M<br>14%</td><td>17.8M<br>78%</td><td>—</td><td>14.4K<br><1%</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=2_1481009631&platform=ios" target="_blank" rel="noopener">Word Farm Adventure</a></td>
+              <td>17.8K</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=2_1602508478&platform=ios" target="_blank" rel="noopener">Word Search Explorer</a></td>
+              <td>7.1M</td><td>819K<br>12%</td><td>130K<br><2%</td><td>5.6M<br>80%</td><td>—</td><td>—</td><td>62.5K<br><1%</td><td>98K<br><2%</td><td>25<br><1%</td><td>—</td><td>179K<br>3%</td><td>17.5K<br><1%</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=2_580935508&platform=ios" target="_blank" rel="noopener">Wordament</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=2_1092689152&platform=ios" target="_blank" rel="noopener">CodyCross</a></td>
+              <td>2.8M</td><td>2.3M<br>81%</td><td>109K<br>4%</td><td>89.4K<br>3%</td><td>—</td><td>—</td><td>—</td><td>6.5K<br><1%</td><td>—</td><td>—</td><td>70.8K<br>3%</td><td>78.8K<br>3%</td><td>—</td><td>15<br><1%</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=2_708600202&platform=ios" target="_blank" rel="noopener">WordBrain</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=2_428312806&platform=ios" target="_blank" rel="noopener">Wordfeud</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=2_600674056&platform=ios" target="_blank" rel="noopener">Pictoword</a></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=2_307569751&platform=ios" target="_blank" rel="noopener">Wordle</a></td>
+              <td>18.1M</td><td>—</td><td>—</td><td>18.1M<br>100%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td><a class="store" href="https://appmagic.rocks/ad-intelligence?appId=2_595558452&platform=ios" target="_blank" rel="noopener">4 Pics 1 Word</a></td>
+              <td>2.6M</td><td>60.8K<br>2%</td><td>—</td><td>2.6M<br>98%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+
+
+
+    <footer>
+      Game Forest · Words Puzzle · конкурентный анализ · внутреннее использование
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      function parseImpressions(text) {
+        if (!text) return 0;
+        var normalized = String(text).replace(/ /g, ' ').replace(/,/g, '.');
+        var match = normalized.match(/(\d+(?:\.\d+)?)\s*([MBK])/i);
+        if (!match) return 0;
+        var value = parseFloat(match[1]);
+        var unit = match[2].toUpperCase();
+        if (unit === 'B') return value * 1e9;
+        if (unit === 'M') return value * 1e6;
+        if (unit === 'K') return value * 1e3;
+        return value;
+      }
+
+      function formatTotal(value) {
+        if (!value) return '—';
+        if (value >= 1e9) return Math.round(value / 1e9) + 'B';
+        if (value >= 1e6) return Math.round(value / 1e6) + 'M';
+        if (value >= 1e3) return Math.round(value / 1e3) + 'K';
+        return String(Math.round(value));
+      }
+
+      function cellMetric(cell, idx) {
+        if (idx === 0) return (cell.textContent || '').trim().toLowerCase();
+        return parseImpressions((cell.textContent || '').split('\\n')[0]);
+      }
+
+      function updateTotalsRow(table) {
+        var tbody = table.querySelector('tbody');
+        if (!tbody) return;
+        var rows = Array.from(tbody.querySelectorAll('tr')).filter(function (row) {
+          return !row.classList.contains('totals-row');
+        });
+        if (!rows.length) return;
+
+        var colCount = rows[0].children.length;
+        var totals = new Array(colCount).fill(0);
+
+        rows.forEach(function (row) {
+          for (var i = 1; i < colCount; i++) {
+            totals[i] += cellMetric(row.children[i], i);
+          }
+        });
+
+        var totalRow = tbody.querySelector('tr.totals-row');
+        if (!totalRow) {
+          totalRow = document.createElement('tr');
+          totalRow.className = 'totals-row';
+          totalRow.style.fontWeight = '700';
+          totalRow.style.background = 'rgba(86, 255, 170, 0.08)';
+          for (var j = 0; j < colCount; j++) totalRow.appendChild(document.createElement('td'));
+          tbody.insertBefore(totalRow, tbody.firstChild);
+        }
+
+        totalRow.children[0].textContent = 'Итого по источнику';
+        for (var k = 1; k < colCount; k++) {
+          totalRow.children[k].textContent = formatTotal(totals[k]);
+        }
+      }
+
+      function makeSortable(table) {
+        var tbody = table.querySelector('tbody');
+        var headers = Array.from(table.querySelectorAll('thead th'));
+        if (!tbody || !headers.length) return;
+
+        headers.forEach(function (th, index) {
+          th.style.cursor = 'pointer';
+          th.title = 'Сортировать';
+          th.addEventListener('click', function () {
+            var currentDir = th.dataset.sortDir === 'asc' ? 'asc' : 'desc';
+            var nextDir = currentDir === 'asc' ? 'desc' : 'asc';
+            headers.forEach(function (h) { delete h.dataset.sortDir; });
+            th.dataset.sortDir = nextDir;
+
+            var rows = Array.from(tbody.querySelectorAll('tr')).filter(function (row) {
+              return !row.classList.contains('totals-row');
+            });
+
+            rows.sort(function (a, b) {
+              var av = cellMetric(a.children[index], index);
+              var bv = cellMetric(b.children[index], index);
+              if (typeof av === 'string') {
+                return nextDir === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av);
+              }
+              return nextDir === 'asc' ? av - bv : bv - av;
+            });
+
+            var anchor = tbody.querySelector('tr.totals-row');
+            rows.forEach(function (row) { tbody.appendChild(row); });
+            if (anchor) tbody.insertBefore(anchor, tbody.firstChild);
+          });
+        });
+      }
+
+      var section = document.getElementById('adintel-source-share');
+      if (!section) return;
+      var tables = section.querySelectorAll('table');
+      tables.forEach(function (table) {
+        updateTotalsRow(table);
+        makeSortable(table);
+      });
+    })();
+  </script>
+  <script>
+    (function () {
+      var table = document.getElementById('appmagic-metrics');
+      if (!table) return;
+
+      var tbody = table.querySelector('tbody');
+      var headers = Array.from(table.querySelectorAll('thead th.am-sortable'));
+      if (!tbody || !headers.length) return;
+
+      var rows = Array.from(tbody.querySelectorAll('tr'));
+      rows.forEach(function (row, index) {
+        row.dataset.initialOrder = String(index);
+      });
+
+      function normalizeName(text) {
+        return String(text || '')
+          .replace(/\s*\(эталон\)\s*/gi, '')
+          .trim()
+          .toLowerCase();
+      }
+
+      function buildSimilarityOrder() {
+        var similarityTable = document.querySelector('#similarity table tbody');
+        var order = {};
+        if (!similarityTable) return order;
+
+        Array.from(similarityTable.querySelectorAll('tr')).forEach(function (row) {
+          var rank = parseInt((row.children[0] && row.children[0].textContent) || '', 10);
+          var nameCell = row.children[1];
+          if (!nameCell || isNaN(rank)) return;
+          var strong = nameCell.querySelector('strong');
+          var name = normalizeName((strong && strong.textContent) || nameCell.textContent);
+          if (name) order[name] = rank;
+        });
+        return order;
+      }
+
+      var similarityOrder = buildSimilarityOrder();
+
+      function gameName(cell) {
+        var strong = cell.querySelector('strong');
+        return normalizeName((strong && strong.textContent) || cell.textContent);
+      }
+
+      function parseNumber(text) {
+        if (!text || text === '—') return null;
+        var cleaned = String(text).replace(/\$/g, '').replace(/,/g, '').trim();
+        var value = parseFloat(cleaned);
+        return isNaN(value) ? null : value;
+      }
+
+      function cellValue(cell, colIndex, sortType) {
+        if (sortType === 'text') return gameName(cell);
+        return parseNumber((cell.textContent || '').trim());
+      }
+
+      function compareValues(a, b, dir) {
+        var aEmpty = a === null;
+        var bEmpty = b === null;
+        if (aEmpty && bEmpty) return 0;
+        if (aEmpty) return 1;
+        if (bEmpty) return -1;
+
+        if (typeof a === 'string') {
+          var cmp = a.localeCompare(b, 'ru');
+          return dir === 'asc' ? cmp : -cmp;
+        }
+
+        return dir === 'asc' ? a - b : b - a;
+      }
+
+      function updateSortIcon(th, dir, sortType) {
+        var icon = th.querySelector('.am-sort-icon');
+        if (!icon) return;
+        if (sortType === 'similarity') {
+          icon.textContent = dir === 'asc' ? '1→30' : '30→1';
+          return;
+        }
+        icon.textContent = dir === 'asc' ? '↑' : '↓';
+      }
+
+      function resetHeaderSort(activeHeader) {
+        headers.forEach(function (header) {
+          if (header === activeHeader) return;
+          header.classList.remove('am-sort-asc', 'am-sort-desc');
+          delete header.dataset.sortDir;
+          var headerIcon = header.querySelector('.am-sort-icon');
+          if (!headerIcon) return;
+          headerIcon.textContent = header.dataset.sortType === 'similarity' ? '#' : '⇅';
+        });
+      }
+
+      function similarityRank(row) {
+        var name = gameName(row.children[0]);
+        return similarityOrder[name] != null ? similarityOrder[name] : 9999;
+      }
+
+      headers.forEach(function (th, colIndex) {
+        var sortType = th.dataset.sortType || 'number';
+        if (sortType !== 'similarity') {
+          th.title = 'Сортировать: клик — больше/А→Я, повторный клик — меньше/Я→А';
+        }
+
+        th.addEventListener('click', function () {
+          var currentDir = th.dataset.sortDir;
+          var nextDir;
+
+          if (!currentDir) {
+            if (sortType === 'similarity') nextDir = 'asc';
+            else if (sortType === 'text') nextDir = 'asc';
+            else nextDir = 'desc';
+          } else {
+            nextDir = currentDir === 'asc' ? 'desc' : 'asc';
+          }
+
+          resetHeaderSort(th);
+
+          th.dataset.sortDir = nextDir;
+          th.classList.add(nextDir === 'asc' ? 'am-sort-asc' : 'am-sort-desc');
+          updateSortIcon(th, nextDir, sortType);
+
+          var sortedRows = rows.slice().sort(function (rowA, rowB) {
+            if (sortType === 'similarity') {
+              var ar = similarityRank(rowA);
+              var br = similarityRank(rowB);
+              var cmp = nextDir === 'asc' ? ar - br : br - ar;
+              if (cmp !== 0) return cmp;
+              return Number(rowA.dataset.initialOrder) - Number(rowB.dataset.initialOrder);
+            }
+
+            var av = cellValue(rowA.children[colIndex], colIndex, sortType);
+            var bv = cellValue(rowB.children[colIndex], colIndex, sortType);
+            var metricCmp = compareValues(av, bv, nextDir);
+            if (metricCmp !== 0) return metricCmp;
+            return Number(rowA.dataset.initialOrder) - Number(rowB.dataset.initialOrder);
+          });
+
+          sortedRows.forEach(function (row) {
+            tbody.appendChild(row);
+          });
+        });
+      });
+    })();
+  </script>
+  <script>
+    (function () {
+      var table = document.getElementById('stores-matrix');
+      if (!table) return;
+
+      var headers = Array.from(table.querySelectorAll('thead th'));
+      var tbody = table.querySelector('tbody');
+      if (!tbody || !headers.length) return;
+
+      var dataRows = Array.from(tbody.querySelectorAll('tr'));
+      dataRows.forEach(function (row, index) { row.dataset.initialOrder = String(index); });
+      var activeIndex = -1;
+
+      function normalizeName(text) {
+        return String(text || '').replace(/\s*\(эталон\)\s*/gi, '').trim().toLowerCase();
+      }
+
+      function buildSimilarityOrder() {
+        var similarityTable = document.querySelector('#similarity table tbody');
+        var order = {};
+        if (!similarityTable) return order;
+        Array.from(similarityTable.querySelectorAll('tr')).forEach(function (row) {
+          var rank = parseInt((row.children[0] && row.children[0].textContent) || '', 10);
+          var nameCell = row.children[1];
+          if (!nameCell || isNaN(rank)) return;
+          var strong = nameCell.querySelector('strong');
+          var name = normalizeName((strong && strong.textContent) || nameCell.textContent);
+          if (name) order[name] = rank;
+        });
+        return order;
+      }
+
+      var similarityOrder = buildSimilarityOrder();
+
+      function hasValueCell(cell) {
+        if (!cell) return false;
+        if (cell.querySelector('a')) return true;
+        return (cell.textContent || '').trim() !== '—';
+      }
+
+      function gameName(row) {
+        var cell = row.children[0];
+        if (!cell) return '';
+        var link = cell.querySelector('a');
+        return normalizeName((link && link.textContent) || cell.textContent);
+      }
+
+      function similarityRank(row) {
+        var name = gameName(row);
+        return similarityOrder[name] != null ? similarityOrder[name] : 9999;
+      }
+
+      function updateHeaderStyles() {
+        headers.forEach(function (header, headerIndex) {
+          if (headerIndex === 0) {
+            header.style.textDecoration = activeIndex < 0 ? 'underline' : '';
+            return;
+          }
+          header.style.textDecoration = headerIndex === activeIndex ? 'underline' : '';
+        });
+      }
+
+      function renderSort() {
+        var orderedRows = dataRows.slice();
+        if (activeIndex < 0) {
+          orderedRows.sort(function (a, b) {
+            var cmp = similarityRank(a) - similarityRank(b);
+            if (cmp !== 0) return cmp;
+            return Number(a.dataset.initialOrder) - Number(b.dataset.initialOrder);
+          });
+        } else {
+          orderedRows.sort(function (a, b) {
+            var aHas = hasValueCell(a.children[activeIndex]) ? 0 : 1;
+            var bHas = hasValueCell(b.children[activeIndex]) ? 0 : 1;
+            if (aHas !== bHas) return aHas - bHas;
+            var cmp = similarityRank(a) - similarityRank(b);
+            if (cmp !== 0) return cmp;
+            return gameName(a).localeCompare(gameName(b), 'ru');
+          });
+        }
+        orderedRows.forEach(function (row) {
+          row.style.display = '';
+          tbody.appendChild(row);
+        });
+        updateHeaderStyles();
+      }
+
+      function resetToSimilarityOrder() {
+        activeIndex = -1;
+        renderSort();
+      }
+
+      headers.forEach(function (th, index) {
+        if (index === 0) {
+          th.addEventListener('click', function () {
+            resetToSimilarityOrder();
+          });
+          return;
+        }
+        th.style.cursor = 'pointer';
+        th.title = 'Показать игры без прочерка в этом столбце; повторный клик — порядок схожести';
+        th.addEventListener('click', function () {
+          activeIndex = activeIndex === index ? -1 : index;
+          renderSort();
+        });
+      });
+
+      updateHeaderStyles();
+    })();
+  </script>
+
+</body>
+</html>
